@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>لوحة الادمن</title>
+
+<style>
+body{
+font-family:Arial;
+background:#111;
+color:white;
+text-align:center;
+padding:40px;
+}
+
+input{
+padding:10px;
+margin:10px;
+width:220px;
+}
+
+button{
+padding:10px 20px;
+margin:5px;
+background:red;
+color:white;
+border:none;
+}
+
+.card{
+background:#222;
+padding:20px;
+margin-top:20px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>لوحة التحكم</h2>
+
+<input id="search" placeholder="ابحث برقم الحساب">
+<br>
+
+<button onclick="search()">بحث</button>
+
+<div id="result"></div>
+
+<script>
+
+async function search(){
+
+let acc=document.getElementById("search").value
+
+let res=await fetch("https://bank-bebo-api.onrender.com/account/"+acc)
+
+let data=await res.json()
+
+document.getElementById("result").innerHTML=`
+
+<div class="card">
+<p>اسم المستخدم: ${data.username}</p>
+<p>الرصيد: ${data.balance}</p>
+
+<button onclick="addMoney('${acc}')">زيادة رصيد</button>
+<button onclick="ban('${acc}')">حظر الحساب</button>
+<button onclick="deleteAcc('${acc}')">حذف الحساب</button>
+</div>
+
+`
+
+}
+
+async function addMoney(acc){
+
+await fetch("https://bank-bebo-api.onrender.com/add/"+acc)
+
+alert("تمت زيادة الرصيد")
+
+}
+
+async function ban(acc){
+
+await fetch("https://bank-bebo-api.onrender.com/ban/"+acc)
+
+alert("تم حظر الحساب")
+
+}
+
+async function deleteAcc(acc){
+
+await fetch("https://bank-bebo-api.onrender.com/delete/"+acc)
+
+alert("تم حذف الحساب")
+
+}
+
+</script>
+
+</body>
+</html>
